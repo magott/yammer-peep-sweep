@@ -62,7 +62,6 @@ public class YammerTemplate implements YammerOperations, InitializingBean {
 	public YammerMessage postPlainReply(String message, String replyToMessageId) {
 		YammerMessageHolder yam = restTemplate.postForObject(YAMMER_BASE + MESSAGES, new YammerPost.Builder().body(message)
 				.repliedTo(replyToMessageId).build(), YammerMessageHolder.class);
-		System.out.println(yam.getYammerMessages().get(0).getId());
 		return yam.getYammerMessages().get(0);
 	}
 
