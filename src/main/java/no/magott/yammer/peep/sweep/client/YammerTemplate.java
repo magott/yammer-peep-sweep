@@ -56,10 +56,6 @@ public class YammerTemplate implements YammerOperations, InitializingBean {
 	public List<YammerMessage> listMessages() {
 		ResponseEntity<YammerMessageHolder> yams = restTemplate.getForEntity(YAMMER_BASE + MESSAGES,
 				YammerMessageHolder.class);
-		System.out.println(yams.getHeaders() + " : " + yams.getBody());
-		for (YammerMessage yam : yams.getBody().getYammerMessages()) {
-			System.out.println("YAm: " + yam);
-		}
 		return yams.getBody().getYammerMessages();
 	}
 
