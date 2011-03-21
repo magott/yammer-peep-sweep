@@ -1,0 +1,7 @@
+.classpath
+target/
+.settings
+.project
+.settings/
+*.out
+yammer-client.properties
