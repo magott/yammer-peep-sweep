@@ -12,6 +12,7 @@ import no.magott.yammer.peep.sweep.client.YammerOperations;
 import no.magott.yammer.peep.sweep.domain.User;
 import no.magott.yammer.peep.sweep.domain.YammerMessage;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class YammerTemplateIntegrationTest {
 	}
 	
 	@Test
+	@Ignore("This will post to yammer, use with care")
 	public void canPostMessage() {
 		YammerMessage message = yammerTemplate.postNewPlainMessage("@morten-andersen-gott is sorry about the spam, but it isn't like Yammer provides a dev environment");
 		assertThat(message.getRepliedToId(), nullValue());
@@ -52,6 +54,7 @@ public class YammerTemplateIntegrationTest {
 	}
 	
 	@Test
+	@Ignore("This will post to yammer, use with care")
 	public void canPostReply(){
 		System.out.println("ReplyId: "+replyId);
 		YammerMessage reply = yammerTemplate.postPlainReply("this is morten again, doing a reply", replyId);
