@@ -9,6 +9,7 @@
 	<configs>
 		<config>src/main/resources/launch-context.xml</config>
 		<config>src/main/resources/yammer-client-context.xml</config>
+		<config>src/main/resources/employment-service-context.xml</config>
 	</configs>
 	<configSets>
 		<configSet>

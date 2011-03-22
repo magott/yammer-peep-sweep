@@ -5,3 +5,4 @@ target/
 .settings/
 *.out
 yammer-client.properties
+employment-service-client.properties
