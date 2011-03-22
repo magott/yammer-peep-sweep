@@ -14,10 +14,10 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * This service uses the {@link #lookupBaseUrl} adding the username. Interprets http 404 as invalid employment
+ * This service uses the {@link #lookupUrl} adding the username. Interprets http 404 as invalid employment
  * http 200 is valid employment.
  * 
- * Examples of lookupBaseUrl:
+ * Examples of lookupUrl:
  * <ul>
  * <li>https://www.mycompany/employes/{username}</li>
  * <li>https://www.mycompany/employes/{user}/profile</li>
@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class HttpEmploymentService implements EmploymentService, InitializingBean {
 
-	private String lookupBaseUrl;
+	private String lookupUrl;
 	private RestTemplate restTemplate;
 	private String username;
 	private String password;
@@ -38,7 +38,7 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	
 	@Override
 	public boolean isEmployed(String username) {
-		ResponseEntity<String> responseEntity = restTemplate.getForEntity(lookupBaseUrl, String.class, username);
+		ResponseEntity<String> responseEntity = restTemplate.getForEntity(lookupUrl, String.class, username);
 		HttpStatus httpStatus = responseEntity.getStatusCode();
 		if(HttpStatus.OK == httpStatus){
 			return true;
@@ -50,8 +50,8 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	}
 
 	
-	public void setLookupBaseUrl(String base) {
-		this.lookupBaseUrl = base;
+	public void setLookupUrl(String base) {
+		this.lookupUrl = base;
 	}
 
 	@Override

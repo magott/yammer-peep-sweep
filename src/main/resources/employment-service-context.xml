@@ -6,7 +6,7 @@
 
 
 	<bean id="employmentService" class="no.magott.yammer.peep.sweep.employment.HttpEmploymentService">
-		<property name="lookupBaseUrl" value="${employment.service.lookup.url}" />
+		<property name="lookupUrl" value="${employment.service.lookup.url}" />
 		<property name="username" value="${employment.service.username}" />
 		<property name="password" value="${employment.service.password}" />
 	</bean>
