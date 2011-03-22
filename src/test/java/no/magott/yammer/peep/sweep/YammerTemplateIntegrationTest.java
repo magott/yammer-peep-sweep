@@ -55,6 +55,8 @@ public class YammerTemplateIntegrationTest {
 				.postNewPlainMessage("@morten-andersen-gott is sorry about the spam, but it isn't like Yammer provides a dev environment");
 		assertThat(message.getRepliedToId(), nullValue());
 		assertThat(message.getId(), notNullValue());
+
+		//Used for testing of replies further down
 		replyId = message.getId();
 	}
 
