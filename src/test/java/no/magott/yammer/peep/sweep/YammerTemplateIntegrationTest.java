@@ -31,7 +31,7 @@ public class YammerTemplateIntegrationTest {
 	@Test
 	public void canListMessages() {
 		List<YammerMessage> yams = yammerTemplate.listMessages();
-		System.out.println(yams);
+		assertThat(yams.size(), not(equalTo(0)));
 	}
 
 	@Test
@@ -56,7 +56,6 @@ public class YammerTemplateIntegrationTest {
 		assertThat(message.getRepliedToId(), nullValue());
 		assertThat(message.getId(), notNullValue());
 		replyId = message.getId();
-		System.out.println(replyId);
 	}
 
 	@Test
