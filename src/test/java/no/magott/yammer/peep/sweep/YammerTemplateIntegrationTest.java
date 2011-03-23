@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class YammerTemplateIntegrationTest {
 	private YammerOperations yammerTemplate;
 
 	private static String replyId;
-
+ 
+	
 	@Test
 	public void canListMessages() {
 		List<YammerMessage> yams = yammerTemplate.listMessages();
@@ -39,6 +41,14 @@ public class YammerTemplateIntegrationTest {
 		final int FIRST_PAGE = 1; // Page number starts at 1
 		List<User> users = yammerTemplate.listAllUsers(FIRST_PAGE);
 		assertThat(users.size(), equalTo(50)); // Yammer provides pages of 50
+	}
+	
+	@Test
+	public void canToStringFetchedUser(){
+		List<User> users = yammerTemplate.listAllUsers(1);
+		User user = users.get(0);
+		System.out.println(user.toString());
+		assertThat(user.toString(),containsString("@"));
 	}
 
 	@Test
