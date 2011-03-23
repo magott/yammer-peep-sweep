@@ -1,10 +1,21 @@
 package no.magott.yammer.peep.sweep.employment;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import no.magott.yammer.peep.sweep.ssl.SSLUtilities;
+
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpHost;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +49,7 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	
 	@Override
 	public boolean isEmployed(String username) {
+		System.out.println("Lookup URL:"+lookupUrl);
 		ResponseEntity<String> responseEntity = restTemplate.getForEntity(lookupUrl, String.class, username);
 		HttpStatus httpStatus = responseEntity.getStatusCode();
 		if(HttpStatus.OK == httpStatus){
@@ -56,8 +68,8 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-//		HttpClient client = setUpNTLMAuth();
-		HttpClient client = setUpBasicAuth();
+		HttpClient client = setUpNTLMAuth();
+//		HttpClient client = setUpBasicAuth();
 		CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(client);
 		restTemplate = new RestTemplate(commons);
 		restTemplate.setErrorHandler(new DefaultResponseErrorHandler(){
@@ -70,13 +82,17 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	
 	private HttpClient setUpNTLMAuth(){
 		HttpClient client = new HttpClient();
-		HostConfiguration hConf= client.getHostConfiguration();
-		hConf.setProxy(null, -1);
-
-		client.getState().setProxyCredentials(
+//		Protocol.registerProtocol("https", 
+//				new Protocol("https", new EasySSLProtocolSocketFactory(), 443));
+		
+		client.getState().setCredentials(
 		new AuthScope(null, -1, AuthScope.ANY_REALM),
-		new NTCredentials(username, password,"peep-sweep",null)
+		new NTCredentials(username, password,"peep-sweep","DIR")
 		);
+
+        List<String> authPrefs = new ArrayList<String>();
+        authPrefs.add(AuthPolicy.NTLM);
+		client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
 		return client;
 	}
 
