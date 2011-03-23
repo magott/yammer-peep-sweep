@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:property-placeholder order="1"
+		location="classpath:yammer-client.properties,classpath:employment-service-client.properties, classpath:batch.properties" />
+
+	<import resource="classpath:yammer-client-context.xml" />
+	<import resource="classpath:employment-service-context.xml" />
+
+	<job id="peepsweep" xmlns="http://www.springframework.org/schema/batch">
+		<step id="identifyUsersForSweeping">
+			<tasklet>
+				<chunk commit-interval="10" reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter"
+					retry-limit="5">
+					<retryable-exception-classes>
+						<include class="org.springframework.web.client.ResourceAccessException" />
+					</retryable-exception-classes>
+				</chunk>
+			</tasklet>
+
+		</step>
+	</job>
+
+	<bean id="yammerUserItemReader" class="no.magott.yammer.peep.sweep.batch.reader.YammerUserItemReader">
+		<property name="yammerOperations" ref="yammerTemplate" />
+	</bean>
+
+	<bean id="employmentStatusProcessor" class="no.magott.yammer.peep.sweep.batch.processor.EmploymentStatusProcessor">
+		<property name="employmentService" ref="employmentService" />
+	</bean>
+
+	<bean id="candidateWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+		<property name="resource" value="file://c:\temp\candidates.txt" />
+		<property name="shouldDeleteIfExists" value="true" />
+		<property name="lineAggregator">
+			<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value="," />
+				<property name="fieldExtractor">
+					<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<property name="names" value="yammerUserName,employeeUserId,suspensionUrl" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+</beans>

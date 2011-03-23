@@ -7,16 +7,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
-	<context:property-placeholder
-		properties-ref="yamProps" location="classpath:yammer-client.properties"/>
+	<context:property-placeholder location="classpath:yammer-client.properties"/>
 
 	<bean id="yammerTemplate" class="no.magott.yammer.peep.sweep.client.YammerTemplate">
 	
 </bean>
 
 
-	<util:properties id="yamProps">
-		<prop key="yammer.username">morten.andersen-gott@accenture.com</prop>
-	</util:properties>
 
 </beans>
