@@ -82,9 +82,20 @@ public class User {
 	public static class Builder {
 		private String name;
 		private String id;
+		private String email;
 
 		public Builder id(String id) {
 			this.id = id;
+			return this;
+		}
+		
+		public Builder name(String name){
+			this.name=name;
+			return this;
+		}
+		
+		public Builder eMail(String email){
+			this.email=email;
 			return this;
 		}
 
@@ -92,6 +103,13 @@ public class User {
 			User user = new User();
 			user.id = id;
 			user.name = name;
+			if(email!=null){
+				user.contact= new Contact();
+				Email eMail = new Email();
+				eMail.address=email;
+				eMail.type="primary";
+				user.contact.emailAddresses=new Email[]{eMail};
+			}
 			return user;
 		}
 	}
