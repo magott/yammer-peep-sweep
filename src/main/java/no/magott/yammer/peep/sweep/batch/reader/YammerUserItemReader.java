@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.AbstractPagingItemReader;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Yammer API supports listing a mximum number of 50 users per page. Will read
@@ -69,4 +70,8 @@ public class YammerUserItemReader implements ItemReader<User> {
 		results = yammerOperations.listAllUsers(page);
 	}
 
+	@Required
+	public void setYammerOperations(YammerOperations yammerOperations) {
+		this.yammerOperations = yammerOperations;
+	}
 }
