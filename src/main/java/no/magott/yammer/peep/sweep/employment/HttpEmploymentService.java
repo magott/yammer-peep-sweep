@@ -49,7 +49,6 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	
 	@Override
 	public boolean isEmployed(String username) {
-		System.out.println("Lookup URL:"+lookupUrl);
 		ResponseEntity<String> responseEntity = restTemplate.getForEntity(lookupUrl, String.class, username);
 		HttpStatus httpStatus = responseEntity.getStatusCode();
 		if(HttpStatus.OK == httpStatus){
@@ -68,8 +67,8 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		HttpClient client = setUpNTLMAuth();
-//		HttpClient client = setUpBasicAuth();
+//		HttpClient client = setUpNTLMAuth();
+		HttpClient client = setUpBasicAuth();
 		CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(client);
 		restTemplate = new RestTemplate(commons);
 		restTemplate.setErrorHandler(new DefaultResponseErrorHandler(){
