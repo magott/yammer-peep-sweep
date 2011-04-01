@@ -8,13 +8,11 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import no.magott.yammer.peep.sweep.domain.SuspensionCandidate;
 import no.magott.yammer.peep.sweep.domain.User;
 import no.magott.yammer.peep.sweep.employment.EmploymentService;
+
+import org.junit.Test;
 
 public class EmploymentStatusProcessorTest {
 

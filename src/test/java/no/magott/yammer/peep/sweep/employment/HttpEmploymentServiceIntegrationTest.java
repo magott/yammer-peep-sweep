@@ -1,5 +1,6 @@
 package no.magott.yammer.peep.sweep.employment;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -21,6 +22,16 @@ public class HttpEmploymentServiceIntegrationTest {
 	public void returnsFalseForInvalidEmployee(){
 		assertThat(employmentService, notNullValue());
 		assertThat(employmentService.isEmployed("foo.bar"), not(true));
+	}
+	@Test
+	public void returnsFalseForInactiveEmployee(){
+		assertThat(employmentService, notNullValue());
+		assertThat(employmentService.isEmployed("david.laas"), is(false));
+	}
+	@Test
+	public void returnsTrueForActiveEmployee(){
+		assertThat(employmentService, notNullValue());
+		assertThat(employmentService.isEmployed("morten.andersen-gott"), not(false));
 	}
 	
 }
