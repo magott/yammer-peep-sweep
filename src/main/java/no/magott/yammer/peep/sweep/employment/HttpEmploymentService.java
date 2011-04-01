@@ -72,9 +72,6 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 			return true;
 		}
 		
-//		authpref.add(AuthPolicy.NTLM);
-		
-		
 		HttpGet httpget = new HttpGet(uriTemplate.expand(username));
 		HttpResponse response = null;
 		response = callGetMethod(localContext, httpget);
