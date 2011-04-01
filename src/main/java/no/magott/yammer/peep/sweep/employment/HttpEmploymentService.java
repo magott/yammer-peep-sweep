@@ -69,12 +69,20 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 			return true;
 		}
 		
-		HttpGet httpget = new HttpGet(uriTemplate.expand(username));
-		HttpResponse response = null;
-		response = callGetMethod(localContext, httpget);
+		HttpResponse response = callServerWithUser(username);
 		
+		boolean employed = isEmployed(response);
+		if(employed){
+			log.debug(username + " is employed");
+		}else{
+			log.info("BUSTED! " +username + " is no longer employed");
+		}
+		return employed;
+	}
+
+
+	private boolean isEmployed(HttpResponse response) {
 		int statusCode = response.getStatusLine().getStatusCode();
-		
 		HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
 		if(HttpStatus.OK == httpStatus){
 			return isActiveEmployee(response);
@@ -86,15 +94,15 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 		}
 	}
 
-
 	/**
 	 * Method only exists to wrap checked exceptions as unchecked
 	 * @param localContext
 	 * @param httpget
 	 * @return
 	 */
-	private HttpResponse callGetMethod(HttpContext localContext, HttpGet httpget) {
+	private HttpResponse callServerWithUser(String username) {
 		try {
+			HttpGet httpget = new HttpGet(uriTemplate.expand(username));
 			return httpclient.execute(httpget, localContext);
 		} catch (ClientProtocolException e) {
 			throw new EmploymentServiceException("Unexpected exception while calling http method",e);
@@ -133,7 +141,6 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    InputSource is = new InputSource( new StringReader( string ) );
 	    Document d = builder.parse( is );
-	    System.out.println(d.toString());
 	    return d;
 	}
 
