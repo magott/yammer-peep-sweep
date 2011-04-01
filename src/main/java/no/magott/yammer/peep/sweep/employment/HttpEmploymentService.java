@@ -52,19 +52,16 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	
 	private static Logger log = Logger.getLogger(HttpEmploymentService.class);
 	
-	private UriTemplate uriTemplate;
-	private WhiteListService whiteListService = new NoWhiteListService();
-	
-	private Credentials credentials;
-	private org.apache.http.auth.AuthScope authScope =  new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME);
+	private AuthScope authScope =  new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME);
 	private List<String> authenticationPreferences;
-
 	private Jaxp13XPathTemplate xPathTemplate = new Jaxp13XPathTemplate();
-
-	private DefaultHttpClient httpclient;
-
 	private HttpContext localContext = new BasicHttpContext();
-	
+
+	private WhiteListService whiteListService = new NoWhiteListService();
+
+	private UriTemplate uriTemplate;
+	private Credentials credentials;
+	private DefaultHttpClient httpclient;
 	
 	@Override
 	public boolean isEmployed(String username) {
@@ -84,7 +81,6 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 		}else if(HttpStatus.INTERNAL_SERVER_ERROR == httpStatus){
 			consumeResponse(response);
 			return false;
-			
 		}else{
 			throw new EmploymentServiceException("Unexpected HttpStatus "+httpStatus+ " Http Response headers: ");//+responseEntity.getHeaders());
 		}
@@ -107,7 +103,10 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 		}
 	}
 
-
+	/**
+	 * Need to consume the response to be able to reuse the httpclient
+	 * @param response
+	 */
 	private void consumeResponse(HttpResponse response){
 		try {
 			EntityUtils.consume(response.getEntity());
