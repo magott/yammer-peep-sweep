@@ -66,6 +66,7 @@ public class HttpEmploymentService implements EmploymentService, InitializingBea
 	@Override
 	public boolean isEmployed(String username) {
 		if(whiteListService.isWhiteListed(username)){
+			log.debug(username+ " is whitelisted");
 			return true;
 		}
 		
