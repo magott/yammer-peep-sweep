@@ -14,7 +14,7 @@
 	<job id="peepsweep" xmlns="http://www.springframework.org/schema/batch">
 		<step id="identifyUsersForSweeping">
 			<tasklet>
-				<chunk commit-interval="10" reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter"
+				<chunk reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter" commit-interval="10"
 					retry-limit="5">
 					<retryable-exception-classes>
 						<include class="org.springframework.web.client.ResourceAccessException" />
@@ -47,5 +47,10 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean id="yammerPostingItemWriter" class="no.magott.yammer.peep.sweep.batch.reader.writer.YammerPostingItemWriter">
+		<property name="headerMessage" value="${yammer.message.header}" />
+	
+</bean>
 
 </beans>

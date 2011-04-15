@@ -20,6 +20,7 @@ import org.springframework.batch.item.ItemWriter;
 public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> {
 
 	private YammerOperations yammerOperations;
+	private String headerMessage;
 
 	private String replyToId;
 
@@ -39,14 +40,16 @@ public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> 
 		}
 	}
 
-	private String createHeaderMessage() {
-		// TODO Auto-generated method stub
-		return null;
+	String createHeaderMessage() {
+		return headerMessage;
 	}
 
 	private String createMessage(SuspensionCandidate candidate) {
-		// TODO Auto-generated method stub
-		return null;
+		return candidate.getYammerUserName() + " suspend by clicking the following url: "+candidate.getSuspensionUrl();
+	}
+	
+	public void setHeaderMessage(String headerMessage) {
+		this.headerMessage = headerMessage;
 	}
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.6.0.201103160035-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[2.6.0.201103281100-PATCH]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -11,6 +11,7 @@
 		<config>src/main/resources/yammer-client-context.xml</config>
 		<config>src/main/resources/employment-service-context.xml</config>
 		<config>src/main/resources/peep-sweep-batch.xml</config>
+		<config>src/test/resources/no/magott/yammer/peep/sweep/batch/reader/writer/YammerPostingItemWriterTest-context.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
