@@ -1,8 +1,10 @@
-package no.magott.yammer.peep.sweep.batch.reader.writer;
+package no.magott.yammer.peep.sweep.batch.writer;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
+
+import no.magott.yammer.peep.sweep.batch.writer.YammerPostingItemWriter;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

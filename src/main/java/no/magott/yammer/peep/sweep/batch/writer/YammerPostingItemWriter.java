@@ -1,4 +1,4 @@
-package no.magott.yammer.peep.sweep.batch.reader.writer;
+package no.magott.yammer.peep.sweep.batch.writer;
 
 import java.util.List;
 
