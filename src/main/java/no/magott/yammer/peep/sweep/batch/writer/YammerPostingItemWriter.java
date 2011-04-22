@@ -6,6 +6,7 @@ import no.magott.yammer.peep.sweep.client.YammerOperations;
 import no.magott.yammer.peep.sweep.domain.SuspensionCandidate;
 import no.magott.yammer.peep.sweep.domain.YammerMessage;
 
+import org.apache.log4j.Logger;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemWriter;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> {
 
+	private Logger log = Logger.getLogger(getClass());
 	private YammerOperations yammerOperations;
 	private String headerMessage;
 
@@ -29,13 +31,19 @@ public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> 
 	public void write(List<? extends SuspensionCandidate> items) throws Exception {
 		for (SuspensionCandidate candidate : items) {
 			postHeaderMessageIfNecessary();
-			yammerOperations.postPlainReply(createMessage(candidate), replyToId);
+			postMessage(candidate);
 		}
 
 	}
 
+	private void postMessage(SuspensionCandidate candidate) {
+		log.debug("Posting suspension message for "+candidate.getYammerUserName());
+		yammerOperations.postPlainReply(createMessage(candidate), replyToId);
+	}
+
 	private void postHeaderMessageIfNecessary() {
 		if(replyToId==null){
+			log.debug("Posting header message");
 			YammerMessage yammerMessage = yammerOperations.postNewPlainMessage(createHeaderMessage());
 			replyToId = yammerMessage.getId();
 		}
