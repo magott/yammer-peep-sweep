@@ -9,6 +9,7 @@ import no.magott.yammer.peep.sweep.domain.YammerMessage;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Does not support restart. To support restart implement {@link ItemStream} and
@@ -44,6 +45,11 @@ public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> 
 		return headerMessage;
 	}
 
+	@Required
+	public void setYammerOperations(YammerOperations yammerOperations) {
+		this.yammerOperations = yammerOperations;
+	}
+	
 	private String createMessage(SuspensionCandidate candidate) {
 		return candidate.getYammerUserName() + " suspend by clicking the following url: "+candidate.getSuspensionUrl();
 	}
