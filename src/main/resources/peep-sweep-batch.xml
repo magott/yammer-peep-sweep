@@ -14,19 +14,22 @@
 	<job id="peepsweep" xmlns="http://www.springframework.org/schema/batch">
 		<step id="identifyUsersForSweeping">
 			<tasklet>
-				<chunk reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter" commit-interval="10"
-					retry-limit="5">
+				<chunk reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter"
+					commit-interval="10" retry-limit="5">
 					<retryable-exception-classes>
 						<include class="org.springframework.web.client.ResourceAccessException" />
 					</retryable-exception-classes>
 				</chunk>
 			</tasklet>
-
+			<listeners>
+				<listener ref="sweepIncrementingListener"/>
+			</listeners>
 		</step>
 	</job>
 
 	<bean id="yammerUserItemReader" class="no.magott.yammer.peep.sweep.batch.reader.YammerUserItemReader">
 		<property name="yammerOperations" ref="yammerTemplate" />
+		<property name="limitChecker" ref="sweepLimitChecker" />
 	</bean>
 
 	<bean id="employmentStatusProcessor" class="no.magott.yammer.peep.sweep.batch.processor.EmploymentStatusProcessor">
@@ -47,10 +50,17 @@
 			</bean>
 		</property>
 	</bean>
-	
+
 	<bean id="yammerPostingItemWriter" class="no.magott.yammer.peep.sweep.batch.reader.writer.YammerPostingItemWriter">
 		<property name="headerMessage" value="${yammer.message.header}" />
-	
-</bean>
+	</bean>
+
+	<bean id="sweepIncrementingListener" class="no.magott.yammer.peep.sweep.listener.SweepIncrementingItemProcessorListner">
+		<property name="sweepLimitChecker" ref="sweepLimitChecker" />
+	</bean>
+
+	<bean id="sweepLimitChecker" class="no.magott.yammer.peep.sweep.batch.support.SweepLimitChecker">
+		<constructor-arg value="${peep.sweep.limit}" />
+	</bean>
 
 </beans>

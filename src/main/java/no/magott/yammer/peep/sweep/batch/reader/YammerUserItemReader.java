@@ -2,6 +2,7 @@ package no.magott.yammer.peep.sweep.batch.reader;
 
 import java.util.List;
 
+import no.magott.yammer.peep.sweep.batch.support.SweepLimitChecker;
 import no.magott.yammer.peep.sweep.client.YammerOperations;
 import no.magott.yammer.peep.sweep.domain.User;
 
@@ -26,6 +27,7 @@ public class YammerUserItemReader implements ItemReader<User> {
 
 	private final Log logger = LogFactory.getLog(getClass());
 	
+	private SweepLimitChecker limitChecker = new SweepLimitChecker(0);
 	private static final int YAMMER_MAX_PAGE_SIZE = 50;
 	private static final int YAMMER_FIRST_PAGE = 1;
 
@@ -43,6 +45,11 @@ public class YammerUserItemReader implements ItemReader<User> {
 	@Override
 	public User read() {
 
+		if(limitChecker.isLimitReached()){
+			logger.info("Sweep limit reached. Terminating by returning null from reader");
+			return null;
+		}
+		
 		if (results == null || current >= pageSize) {
 
 			if (logger.isDebugEnabled()) {
@@ -66,7 +73,12 @@ public class YammerUserItemReader implements ItemReader<User> {
 
 	}
 
+	public void setLimitChecker(SweepLimitChecker limitChecker) {
+		this.limitChecker = limitChecker;
+	}
+	
 	public void doReadPage() {
+		logger.debug("Fetching next page from Yammer. Page #"+page);
 		results = yammerOperations.listAllUsers(page);
 	}
 
