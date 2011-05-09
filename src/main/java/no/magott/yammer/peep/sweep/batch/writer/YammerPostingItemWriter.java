@@ -24,6 +24,7 @@ public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> 
 	private Logger log = Logger.getLogger(getClass());
 	private YammerOperations yammerOperations;
 	private String headerMessage;
+	private int backOffInSeconds = 30;
 
 	private String replyToId;
 
@@ -32,6 +33,7 @@ public class YammerPostingItemWriter implements ItemWriter<SuspensionCandidate> 
 		for (SuspensionCandidate candidate : items) {
 			postHeaderMessageIfNecessary();
 			postMessage(candidate);
+			Thread.sleep(backOffInSeconds*1000);
 		}
 
 	}
