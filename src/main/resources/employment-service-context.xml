@@ -24,7 +24,8 @@
 	<bean id="whiteListService" class="no.magott.yammer.peep.sweep.whitelist.SimpleWhiteListService">
 		<property name="whiteListedUsers">
 		<list>
-			<value>${employment.service.username}</value>
+			<value>yammer.peepsweep</value>
+			<value>strategy.learning</value>
 		</list>
 		</property>
 	</bean>
