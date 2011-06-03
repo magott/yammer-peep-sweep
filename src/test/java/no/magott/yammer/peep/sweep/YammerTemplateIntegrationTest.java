@@ -42,6 +42,15 @@ public class YammerTemplateIntegrationTest {
 		List<User> users = yammerTemplate.listAllUsers(FIRST_PAGE);
 		assertThat(users.size(), equalTo(50)); // Yammer provides pages of 50
 	}
+
+	@Test
+	public void firstAndSecondPageIsNotEqual() {
+		final int FIRST_PAGE = 1; // Page number starts at 1
+		List<User> first = yammerTemplate.listAllUsers(FIRST_PAGE);
+		List<User> second = yammerTemplate.listAllUsers(FIRST_PAGE+1);
+		
+		assertThat(first, not(equalTo(second)));
+	}
 	
 	@Test
 	public void canToStringFetchedUser(){
@@ -62,7 +71,7 @@ public class YammerTemplateIntegrationTest {
 	@Ignore("This will post to yammer, use with care")
 	public void canPostMessage() {
 		YammerMessage message = yammerTemplate
-				.postNewPlainMessage("@morten-andersen-gott is sorry about the spam, but it isn't like Yammer provides a dev environment");
+				.postNewPlainMessage("@morten-andersen-gott re-testing posting. Got a 404 from yammer.");
 		assertThat(message.getRepliedToId(), nullValue());
 		assertThat(message.getId(), notNullValue());
 

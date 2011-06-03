@@ -1,5 +1,7 @@
 package no.magott.yammer.peep.sweep.domain;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +40,14 @@ public class User {
 	
 	public Contact getContact() {
 		return contact;
+	}
+	
+	public boolean equals(Object other){
+		if (other instanceof User) {
+			User otherUser = (User) other;
+			return id==otherUser.id;
+		}
+		return false;
 	}
 
 	public String toString() {
