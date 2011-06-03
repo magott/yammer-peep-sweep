@@ -12,18 +12,24 @@
 	<import resource="classpath:employment-service-context.xml" />
 
 	<job id="peepsweep" xmlns="http://www.springframework.org/schema/batch">
-		<step id="identifyUsersForSweeping">
+		<step id="identifyUsersForSweeping" next="postListToYammer">
 			<tasklet>
 				<chunk reader="yammerUserItemReader" processor="employmentStatusProcessor" writer="candidateWriter"
 					commit-interval="10" retry-limit="5">
 					<retryable-exception-classes>
 						<include class="org.springframework.web.client.ResourceAccessException" />
+						<include class="java.net.ConnectException" />
 					</retryable-exception-classes>
 				</chunk>
 			</tasklet>
 			<listeners>
 				<listener ref="sweepIncrementingListener" />
 			</listeners>
+		</step>
+		<step id="postListToYammer">
+			<tasklet>
+				<chunk reader="candidateReader" writer="yammerPostingItemWriter" commit-interval="10"/>
+			</tasklet>
 		</step>
 	</job>
 
@@ -52,12 +58,13 @@
 	</bean>
 
 	<bean id="candidateReader" class="org.springframework.batch.item.file.FlatFileItemReader">
-		<property name="resource" value="file://c:/temp/candidates.txt" />
+		<property name="resource" value="file:c:\\temp\candidates.txt" />
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
 				<property name="lineTokenizer">
 					<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
 						<property name="delimiter" value="," />
+						<property name="names" value="yammerUserName,employeeUserId,suspensionUrl" />
 					</bean>
 				</property>
 				<property name="fieldSetMapper">
@@ -70,6 +77,7 @@
 	</bean>
 
 	<bean id="yammerPostingItemWriter" class="no.magott.yammer.peep.sweep.batch.writer.YammerPostingItemWriter">
+		<property name="yammerOperations" ref="yammerTemplate" />
 		<property name="headerMessage" value="${yammer.message.header}" />
 	</bean>
 
