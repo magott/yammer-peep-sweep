@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 public class YammerTemplate implements YammerOperations, InitializingBean {
 
 	private final String YAMMER_BASE = "https://www.yammer.com/";
-	private final String USERS = "api/v1/users.json?page={page}";
+	private final String USERS = "api/v1/users.json?page={page}&sort_by={sort_by}";
 	private final String MESSAGES = "api/v1/messages.json";
 
 	@Value("${yammer.consumer.key}")
@@ -42,6 +42,7 @@ public class YammerTemplate implements YammerOperations, InitializingBean {
 	public List<User> listAllUsers(int page) {
 		Map<String, String> urlParameters = new HashMap<String, String>();
 		urlParameters.put("page", Integer.toString(page));
+		urlParameters.put("sort_by", "messages");
 		ResponseEntity<User[]> users = restTemplate.getForEntity(YAMMER_BASE + USERS, User[].class, urlParameters);
 		return Arrays.asList(users.getBody());
 	}

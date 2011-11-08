@@ -47,6 +47,7 @@ public class YammerTemplateIntegrationTest {
 	public void firstAndSecondPageIsNotEqual() {
 		final int FIRST_PAGE = 1; // Page number starts at 1
 		List<User> first = yammerTemplate.listAllUsers(FIRST_PAGE);
+		System.out.println(first);
 		List<User> second = yammerTemplate.listAllUsers(FIRST_PAGE+1);
 		
 		assertThat(first, not(equalTo(second)));
